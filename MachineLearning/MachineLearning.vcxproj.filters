@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{9a026d27-396c-4a59-bb19-4bdaeb29b01c}</UniqueIdentifier>
+      <Extensions>cpp;c</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{8d787819-2730-4f69-b60a-6406a8880ce4}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\BiasLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConvolutionLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DenseLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\INetworkLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MaxPoolLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NeuralNet.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PaddedConvolutionLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pch.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SigmoidLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SoftmaxLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TanHLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetver.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TrainingFunctions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\BiasLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ConvolutionLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DenseLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MaxPoolLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\NeuralNet.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PaddedConvolutionLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\pch.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SigmoidLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SoftmaxLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TanHLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TrainingFunctions.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
