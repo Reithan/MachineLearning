@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "NeuralNet.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 NeuralNet::NeuralNet(double lambda, double dropout) :

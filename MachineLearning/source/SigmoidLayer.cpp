@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SigmoidLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 bool SigmoidLayer::ForwardPropagate(af::array &values, const af::array &/*weights*/)
@@ -18,7 +18,18 @@ af::array SigmoidLayer::BackPropagate(af::array &error, const af::array &/*weigh
 
 double SigmoidLayer::CalculateCost(const af::array &output, const af::array &truth)
 {
-	return af::sum<double>((-truth) * af::log(output) - (1 - truth) * af::log(1 - output)) / output.dims()[0];
+	auto
+		 output_log		= af::log(output)
+		,inv_output_log	= af::log(1 - output)
+	;
+	double cost = af::sum<double>((-truth) * output_log - (1 - truth) * inv_output_log) / output.dims()[0];
+	if (isnan(cost) || isinf(cost))
+	{
+		af::replace(output_log, !(af::isNaN(output_log) || af::isInf(output_log)), 100.0);
+		af::replace(inv_output_log, !(af::isNaN(inv_output_log) || af::isInf(inv_output_log)), 100.0);
+		cost = af::sum<double>((-truth) * output_log - (1 - truth) * inv_output_log) / output.dims()[0];
+	}
+	return cost;
 }
 
 af::array SigmoidLayer::CalculateError(af::array &values, const af::array &truth, const af::array &weights)

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "DenseLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 DenseLayer::~DenseLayer()

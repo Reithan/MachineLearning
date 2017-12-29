@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 //class af::array;

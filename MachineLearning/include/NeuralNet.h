@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 class NeuralNet
@@ -19,7 +19,7 @@ public:
 	double GetDropout	() const { return _dropout	; }
 
 	template <typename Type>
-	size_t AddLayer(const af::dim4 &size);
+	size_t AddLayer(const af::dim4 &size = af::dim4(0, 0, 0, 0));
 	std::vector<af::dim4> GetLayerSizes();
 	dim_t GetWeightsSize();
 
@@ -41,7 +41,7 @@ private:
 };
 
 template <typename Type>
-size_t NeuralNet::AddLayer(const af::dim4 &size = af::dim4(0,0,0,0))
+size_t NeuralNet::AddLayer(const af::dim4 &size)
 {
 	_layers.emplace_back(std::unique_ptr<INetworkLayer>(new Type(size)));
 	return _layers.size();

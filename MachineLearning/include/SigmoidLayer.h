@@ -2,7 +2,7 @@
 
 #include "INetworkLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 class SigmoidLayer : public INetworkLayer

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PaddedConvolutionLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 PaddedConvolutionLayer::~PaddedConvolutionLayer()

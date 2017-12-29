@@ -7,10 +7,15 @@
 
 #include "targetver.h"
 
+#pragma warning(push)
+#pragma warning(disable:4275)
 #include <arrayfire.h>
+#pragma warning(pop)
 
 #include <iostream>
 #include <iomanip>
+
+#include <cmath>
 
 #ifndef MIN
 #define MIN(a,b) ((a<b)?(a):(b))

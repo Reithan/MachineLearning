@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MaxPoolLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 bool MaxPoolLayer::ForwardPropagate(af::array &values, const af::array &/*weights*/)

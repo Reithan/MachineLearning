@@ -2,7 +2,7 @@
 
 #include "ConvolutionLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 class PaddedConvolutionLayer : public ConvolutionLayer

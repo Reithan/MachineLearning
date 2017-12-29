@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TanHLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 bool TanHLayer::ForwardPropagate(af::array &values, const af::array &/*weights*/)

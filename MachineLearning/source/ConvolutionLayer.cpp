@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ConvolutionLayer.h"
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 ConvolutionLayer::~ConvolutionLayer()

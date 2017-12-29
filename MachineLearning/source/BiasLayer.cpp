@@ -2,7 +2,7 @@
 #include "BiasLayer.h"
 
 
-namespace ArrayFireTrainer
+namespace UAFML
 {
 
 bool BiasLayer::ForwardPropagate(af::array &values, const af::array &weights)
