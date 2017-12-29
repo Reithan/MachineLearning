@@ -27,13 +27,13 @@ namespace CGDFunc
 		https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf
 		*/
 
-		double epsilon = 1e-6, sigma = 1e-1;
+		const double epsilon = 1e-6, sigma = 1e-1;
 		af::array saved_weights = weights;
 		size_t j = 0;
-		double delta_d = INNER_PROD(search_direction, search_direction);
-		double alpha = -sigma;
 		double
-			 eta		= 0.0
+			 delta_d	= INNER_PROD(search_direction, search_direction)
+			,alpha		= -sigma
+			,eta		= 0.0
 			,eta_prev	= 0.0
 			,motion		= 0.0
 		;

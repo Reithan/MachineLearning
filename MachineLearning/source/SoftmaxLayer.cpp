@@ -27,7 +27,7 @@ double SoftmaxLayer::CalculateCost(const af::array &output, const af::array &tru
 
 	if(isnan(cost) || isinf(cost))
 	{
-		af::replace(correct_logprobs, !(af::isNaN(correct_logprobs) || af::isInf(correct_logprobs)), 100.0);
+		af::replace(correct_logprobs, !(af::isNaN(correct_logprobs) || af::isInf(correct_logprobs)), -100.0);
 		cost = af::sum<double>(correct_logprobs) / output.dims()[0];
 	}
 
