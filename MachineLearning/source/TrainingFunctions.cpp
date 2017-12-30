@@ -461,10 +461,13 @@ void ConjugateGradientDescent(NeuralNet &network, const af::array &training_set,
 
 	CGDFunc::LineSearch line_search = &CGDFunc::SecantLineSearch;
 	
-	af::array residual, prev_residual, search_direction, delta_residual, prev_delta_residual;
-	double time = 0.0, residual_sq_mag0,
-			beta, epsilon = 1e-6;
-	short fail_count = 0;
+	af::array residual, prev_residual, search_direction, delta_residual, prev_delta_residual
+		,best_weights	= weights;
+	double residual_sq_mag0, cost, beta
+		,best_cost			= DBL_MAX
+		,time				= 0.0
+		,epsilon			= 1e-6;
+	short fail_count		= 0;
 
 	residual = -CALC_GRAD(weights);
 	search_direction = residual;
@@ -503,20 +506,29 @@ void ConjugateGradientDescent(NeuralNet &network, const af::array &training_set,
 		{
 			search_direction = residual + beta * search_direction;
 		}
+
+		cost = CALC_COST(weights);
+		if (cost < best_cost)
+		{
+			best_cost = cost;
+			best_weights = weights;
+		}
+
 		time += timer.stop();
 		if (time >= 1.0)
 		{
 			time = 0.0;
 			std::cout << "Cost at iteration: "
 				<< std::setw(10) << std::setfill(' ') << std::setprecision(6) << std::fixed
-				<< i << " - " << CALC_COST(weights) << std::endl;
+				<< i << " - " << cost << std::endl;
 		}
 
 		// manually invoke garbage collector to clean up any leftover temporaries
 		//	shouldn't be needed long-term.
 		af::deviceGC();
 	}
-	std::cout << "Cost at cgd end: "
+	weights = best_weights;
+	std::cout << "Best cost at cgd end: "
 		<< std::setw(10) << std::setfill(' ') << std::setprecision(6) << std::fixed
 		<< CALC_COST(weights) << std::endl;
 }
