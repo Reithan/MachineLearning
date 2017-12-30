@@ -23,12 +23,12 @@ af::array SoftmaxLayer::BackPropagate(af::array &error, const af::array &/*weigh
 double SoftmaxLayer::CalculateCost(const af::array &output, const af::array &truth)
 {
 	af::array correct_logprobs = -truth * af::log(output);
-	double cost = af::sum<double>(correct_logprobs) / output.dims()[0];
+	double cost = af::sum<double>(correct_logprobs) / output.dims(0);
 
 	if(isnan(cost) || isinf(cost))
 	{
-		af::replace(correct_logprobs, !(af::isNaN(correct_logprobs) || af::isInf(correct_logprobs)), -100.0);
-		cost = af::sum<double>(correct_logprobs) / output.dims()[0];
+		af::replace(correct_logprobs, !(af::isNaN(correct_logprobs) || af::isInf(correct_logprobs)), 100);
+		cost = af::sum<double>(correct_logprobs) / output.dims(0);
 	}
 
 	return cost;
@@ -36,7 +36,7 @@ double SoftmaxLayer::CalculateCost(const af::array &output, const af::array &tru
 
 af::array SoftmaxLayer::CalculateError(af::array &values, const af::array &truth, const af::array &weights)
 {
-	values = (values - truth) / values.dims()[0];
+	values = (values - truth) / values.dims(0);
 	return af::array();
 }
 

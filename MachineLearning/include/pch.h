@@ -47,3 +47,11 @@ inline short isnan(T number) { return !(number == number); }
 template <typename T>
 inline short isinf(T number) { return ((number == number) && (double(number - number) != 0.0)) ? ((double(number) > 0.0) ? 1 : -1) : false; }
 #endif
+
+struct AF_SET_SEED
+{
+	AF_SET_SEED() {
+		static time_t seed = time(nullptr);
+		af::setSeed(seed++);
+	}
+};

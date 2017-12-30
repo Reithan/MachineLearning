@@ -6,57 +6,59 @@ namespace UAFML
 
 namespace CGDFunc
 {
-	// helper macros
+// helper macros
 #define CALC_GRAD(inputs) network.BackPropagate(network.ForwardPropagate(training_set, (inputs)), truth, (inputs))
 
 #define CALC_COST(inputs) network.CalculateCost(network.ForwardPropagate(training_set, (inputs)), truth, (inputs))
 
 #define INNER_PROD(lhs, rhs) af::sum<double>(af::matmulTN((lhs), (rhs)))
 
-	typedef bool(*LineSearch)(NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights, af::array &search_direction);
+typedef bool(*LineSearch)(NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights, af::array &search_direction);
 
-	bool SecantLineSearch(NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights, af::array &search_direction)
+bool SecantLineSearch(NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights, af::array &search_direction)
+{
+	/* Algorithm pseudo-code basis from
+	An Introduction to
+	the Conjugate Gradient Method
+	Without the Agonizing Pain
+	Edition 1 1/4
+	Jonathan Richard Shewchuk
+	August 4, 1994
+	https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf
+	*/
+
+	const double epsilon = 1e-6, sigma = 1e-1;
+	af::array saved_weights = weights;
+	size_t j = 0;
+	double
+			delta_d	= INNER_PROD(search_direction, search_direction)
+		,alpha		= -sigma
+		,eta		= 0.0
+		,eta_prev	= 0.0
+		,motion		= 0.0
+	;
+	eta_prev = INNER_PROD(CALC_GRAD(weights + sigma * search_direction), search_direction);
+	bool line_fail = false;
+	do
 	{
-		/* Algorithm pseudo-code basis from
-		An Introduction to
-		the Conjugate Gradient Method
-		Without the Agonizing Pain
-		Edition 1 1/4
-		Jonathan Richard Shewchuk
-		August 4, 1994
-		https://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf
-		*/
+		eta = INNER_PROD(CALC_GRAD(weights), search_direction);
+		alpha = alpha * eta / (eta_prev - eta);
+		if (isnan(alpha) || isinf(alpha))
+			return false;
+		motion += delta_d * alpha;
+		weights += alpha * search_direction;
+		eta_prev = eta;
+		++j;
+	} while (j < 20 && alpha * alpha * delta_d > epsilon * epsilon);
 
-		const double epsilon = 1e-6, sigma = 1e-1;
-		af::array saved_weights = weights;
-		size_t j = 0;
-		double
-			 delta_d	= INNER_PROD(search_direction, search_direction)
-			,alpha		= -sigma
-			,eta		= 0.0
-			,eta_prev	= 0.0
-			,motion		= 0.0
-		;
-		eta_prev = INNER_PROD(CALC_GRAD(weights + sigma * search_direction), search_direction);
-		bool line_fail = false;
-		do
-		{
-			eta = INNER_PROD(CALC_GRAD(weights), search_direction);
-			alpha = alpha * eta / (eta_prev - eta);
-			if (isnan(alpha) || isinf(alpha))
-				return false;
-			motion += delta_d * alpha;
-			weights += alpha * search_direction;
-			eta_prev = eta;
-			++j;
-		} while (j < 20 && alpha * alpha * delta_d > epsilon * epsilon);
-
-		return (motion > epsilon * epsilon);
-	}
+	return (motion > epsilon);
+}
 }
 
 af::array InitializeWeights(dim_t num_elements, const af::dtype type, double min, double max)
 {
+	static AF_SET_SEED seed_set;
+
 	af::array order, weights = min + (max - min) * af::range(num_elements, 1, 1, 1, 0, type) / num_elements;
 	af::sort(order, weights, af::randu(num_elements), weights);
 	return weights;
@@ -64,6 +66,8 @@ af::array InitializeWeights(dim_t num_elements, const af::dtype type, double min
 
 af::array RandomPermutation(dim_t number, dim_t max_value)
 {
+	static AF_SET_SEED seed_set;
+
 	double window = (max_value) / (double)number;
 	af::array idx = af::seq(0, (double)max_value - 1.0, window);
 	idx += af::randu(idx.elements(), u32) % window;
@@ -74,6 +78,8 @@ af::array RandomPermutation(dim_t number, dim_t max_value)
 
 bool CheckGradient(NeuralNet &network, af::dim4 &input_size, dim_t num_classes, int checks, const af::dtype type)
 {
+	static AF_SET_SEED seed_set;
+
 	std::cout << "Checking gradient functions.\n";
 	double diff, epsilon, tolerance;
 	switch (type)
@@ -184,6 +190,8 @@ bool CheckGradient(NeuralNet &network, af::dim4 &input_size, dim_t num_classes, 
 
 void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
 {
+	static AF_SET_SEED seed_set;
+
 	af::dtype type = training_set.type();
 	
 	// helper lambda to calculate smoothed mean values
@@ -196,7 +204,7 @@ void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, N
 
 	const double target = 0.05, minimum = 0.03;
 	double current_momentum = 0.0;
-	auto num_examples = training_set.dims()[0];
+	auto num_examples = training_set.dims(0);
 	af::array output, gradient, examples, labels;
 	af::array velocity(weights.dims(), type);
 	velocity = 0;
@@ -312,6 +320,8 @@ void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, N
 
 bool SingleExtendedGradientDescent(double &alpha, double &momentum, dim_t batch_size, unsigned int &iteration, unsigned int &epoch, af::array &tally, NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
 {
+	static AF_SET_SEED seed_set;
+	
 	af::dtype type = training_set.type();
 
 	// helper lambda to calculate smoothed mean values
@@ -324,7 +334,7 @@ bool SingleExtendedGradientDescent(double &alpha, double &momentum, dim_t batch_
 
 	const double target = 0.05, minimum = 0.03;
 	static double current_momentum = 0.0;
-	auto num_examples = training_set.dims()[0];
+	auto num_examples = training_set.dims(0);
 	af::array output, gradient, examples, labels;
 	static af::array velocity = af::constant(0.0, weights.dims(), type);
 
@@ -442,7 +452,7 @@ void StochasticGradientDescent(double alpha, double momentum, NeuralNet &network
 
 void BatchGradientDescent(double alpha, NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
 {
-	MiniBatchGradientDescent(alpha, 0.0, training_set.dims()[0], network, training_set, truth, weights);
+	MiniBatchGradientDescent(alpha, 0.0, training_set.dims(0), network, training_set, truth, weights);
 }
 
 void ConjugateGradientDescent(NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
@@ -462,16 +472,16 @@ void ConjugateGradientDescent(NeuralNet &network, const af::array &training_set,
 	CGDFunc::LineSearch line_search = &CGDFunc::SecantLineSearch;
 	
 	af::array residual, prev_residual, search_direction, delta_residual, prev_delta_residual;
-	double time = 0.0, residual_sq_mag,
+	double time = 0.0, residual_sq_mag0,
 			beta, epsilon = 1e-6;
 	short fail_count = 0;
 
 	residual = -CALC_GRAD(weights);
 	search_direction = residual;
-	residual_sq_mag = INNER_PROD(residual, search_direction);
-	delta_residual = af::constant(0.0, weights.dims());
+	residual_sq_mag0 = INNER_PROD(residual, search_direction);
+	delta_residual = residual - af::constant(0.0, weights.dims());
 
-	for (dim_t i = 0, k = 0; i < weights_size && INNER_PROD(residual, search_direction) > epsilon * epsilon * residual_sq_mag; ++i)
+	for (dim_t i = 0, k = 0; i < weights_size && INNER_PROD(residual, search_direction) > epsilon * epsilon * residual_sq_mag0; ++i)
 	{
 		auto timer = af::timer::start();
 

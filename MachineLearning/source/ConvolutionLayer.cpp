@@ -111,12 +111,12 @@ af::array ConvolutionLayer::BackPropagate(af::array &error, const af::array &wei
 
 double ConvolutionLayer::CalculateCost(const af::array &output, const af::array &truth)
 {
-	return af::sum<double>(af::pow(output - truth, 2)) / (2 * output.dims()[0]);
+	return af::sum<double>(af::pow(output - truth, 2)) / (2 * output.dims(0));
 }
 
 af::array ConvolutionLayer::CalculateError(af::array &values, const af::array &truth, const af::array &weights)
 {
-	values = (values - truth) / values.dims()[0];
+	values = (values - truth) / values.dims(0);
 	return BackPropagate(values, weights);
 }
 
