@@ -57,8 +57,6 @@ bool SecantLineSearch(NeuralNet &network, const af::array &training_set, const a
 
 af::array InitializeWeights(dim_t num_elements, const af::dtype type, double min, double max)
 {
-	static AF_SET_SEED seed_set;
-
 	af::array order, weights = min + (max - min) * af::range(num_elements, 1, 1, 1, 0, type) / num_elements;
 	af::sort(order, weights, af::randu(num_elements), weights);
 	return weights;
@@ -66,8 +64,6 @@ af::array InitializeWeights(dim_t num_elements, const af::dtype type, double min
 
 af::array RandomPermutation(dim_t number, dim_t max_value)
 {
-	static AF_SET_SEED seed_set;
-
 	double window = (max_value) / (double)number;
 	af::array idx = af::seq(0, (double)max_value - 1.0, window);
 	idx += af::randu(idx.elements(), u32) % window;
@@ -78,8 +74,6 @@ af::array RandomPermutation(dim_t number, dim_t max_value)
 
 bool CheckGradient(NeuralNet &network, af::dim4 &input_size, dim_t num_classes, int checks, const af::dtype type)
 {
-	static AF_SET_SEED seed_set;
-
 	std::cout << "Checking gradient functions.\n";
 	double diff, epsilon, tolerance;
 	switch (type)
@@ -190,8 +184,6 @@ bool CheckGradient(NeuralNet &network, af::dim4 &input_size, dim_t num_classes, 
 
 void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
 {
-	static AF_SET_SEED seed_set;
-
 	af::dtype type = training_set.type();
 	
 	// helper lambda to calculate smoothed mean values
@@ -320,8 +312,6 @@ void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, N
 
 bool SingleExtendedGradientDescent(double &alpha, double &momentum, dim_t batch_size, unsigned int &iteration, unsigned int &epoch, af::array &tally, NeuralNet &network, const af::array &training_set, const af::array &truth, af::array &weights)
 {
-	static AF_SET_SEED seed_set;
-	
 	af::dtype type = training_set.type();
 
 	// helper lambda to calculate smoothed mean values
