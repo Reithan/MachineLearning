@@ -54,6 +54,9 @@
     <ClInclude Include="include\TrainingFunctions.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\ReLULayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BiasLayer.cpp">
@@ -87,6 +90,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\TrainingFunctions.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ReLULayer.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
