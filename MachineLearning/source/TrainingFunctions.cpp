@@ -295,10 +295,6 @@ void MiniBatchGradientDescent(double alpha, double momentum, dim_t batch_size, N
 			}
 		}
 
-		// manually invoke garbage collector to clean up any leftover temporaries
-		//	shouldn't be needed long-term.
-		af::deviceGC();
-
 		if (idx.s.end == num_examples - 1)
 		{
 			af::sort(example_shuffle,order,af::randu(num_examples));
@@ -425,10 +421,6 @@ bool SingleExtendedGradientDescent(double &alpha, double &momentum, dim_t batch_
 			//}
 		}
 
-		// manually invoke garbage collector to clean up any leftover temporaries
-		//	shouldn't be needed long-term.
-		af::deviceGC();
-
 		++epoch;
 		return true;
 	}
@@ -522,10 +514,6 @@ void ConjugateGradientDescent(NeuralNet &network, const af::array &training_set,
 				<< std::setw(10) << std::setfill(' ') << std::setprecision(6) << std::fixed
 				<< i << " - " << cost << std::endl;
 		}
-
-		// manually invoke garbage collector to clean up any leftover temporaries
-		//	shouldn't be needed long-term.
-		af::deviceGC();
 	}
 	weights = best_weights;
 	std::cout << "Best cost at cgd end: "
