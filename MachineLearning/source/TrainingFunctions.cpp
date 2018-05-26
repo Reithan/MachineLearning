@@ -133,7 +133,7 @@ bool CheckGradient(NeuralNet &network, af::dim4 &input_size, dim_t num_classes, 
 	af::array selection = RandomPermutation(checks, elements);
 	for (int i = 0; i < checks; i++)
 	{
-		int j = selection(i).scalar<int>();
+		int j = selection(i).scalar<unsigned int>();
 		checked_gradient(j) = gradient(j);
 		test_weights(j) = theta(j) + epsilon;
 		cost_pos = network.CalculateCost(network.ForwardPropagate(inputs, test_weights), truth_bool, test_weights);
